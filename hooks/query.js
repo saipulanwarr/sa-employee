@@ -1,13 +1,13 @@
 import { useInfiniteQuery, useQuery } from "react-query";
 import { getClient } from "@/api/client";
 
-const fetchEmployee = async (pageNo, limit = 15) => {
+const fetchEmployee = async (param) => {
   const client = await getClient();
   const { data } = await client("/employee", {
     params: {
-      limit: limit,
-      page: pageNo.pageParam ? pageNo.pageParam : 1,
-      search: pageNo.queryKey[1],
+      limit: 15,
+      page: param.pageParam ? param.pageParam : 1,
+      search: param.queryKey[1],
     },
   });
   return data;
