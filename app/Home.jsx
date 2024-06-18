@@ -5,14 +5,19 @@ import {
   View,
   TextInput,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import { Colors } from "@/constants/Colors";
 import { ItemList, FloatingActionButton, Spinner } from "@/components";
 import { useFetchEmployee } from "@/hooks/query";
+import useDebounce from "@/hooks/useDebounce";
 
 const index = () => {
-  const { data, isLoading, hasNextPage, fetchNextPage } = useFetchEmployee("");
+  const [search, setSearch] = useState("");
+  const debounceSearchTerm = useDebounce(search, 500);
+
+  const { data, isLoading, hasNextPage, fetchNextPage } =
+    useFetchEmployee(debounceSearchTerm);
   const dataArr = data?.pages?.map((page) => page).flat();
 
   const onReachEnd = () => {
@@ -28,7 +33,12 @@ const index = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <TextInput placeholder="Search" style={styles.search} />
+        <TextInput
+          placeholder="Search"
+          style={styles.search}
+          onChangeText={(e) => setSearch(e)}
+          value={search}
+        />
       </View>
       <FlatList
         data={dataArr}

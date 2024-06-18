@@ -7,15 +7,15 @@ const fetchEmployee = async (pageNo, limit = 15) => {
     params: {
       limit: limit,
       page: pageNo.pageParam ? pageNo.pageParam : 1,
-      search: "",
+      search: pageNo.queryKey[1],
     },
   });
   return data;
 };
 
-export const useFetchEmployee = () => {
+export const useFetchEmployee = (search) => {
   return useInfiniteQuery({
-    queryKey: ["employee"],
+    queryKey: ["employee", search],
     queryFn: fetchEmployee,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length === 0) return undefined;
